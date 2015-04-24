@@ -11,6 +11,7 @@ def main(directory):
 	os.chdir(directory)
 	fileList = [item for item in os.listdir(os.getcwd())]
 	fileList.remove('.DS_Store'), fileList.remove('case-refs.csv')
+	fileList.remove('jhudesc-1.txt')
 
 	for i in fileList:
 		os.chdir(directory)
@@ -24,12 +25,20 @@ def main(directory):
 		allData = [word.encode("ascii", "ignore") for word in uniData]
 		allCountDict = {}
 
+		h = open('/Users/Andrew/Dropbox/python/focus/Word_Analysis/input/jhudesc-1.txt').read()
+		hop = tokenizer.tokenize(h)
+		hopData = [word.decode("utf-8", "ignore") for word in hop]
+		hopData = [word.encode("ascii", "ignore") for word in hopData]
+
 		for word in allData:
-			allCountDict.update({word: allData.count(word)})
-		print allCountDict
+			for item in hopData:
+				if word  == item:
+					allCountDict.update({word: allData.count(word)})
+
 		os.chdir('/Users/Andrew/Dropbox/python/focus/Word_Analysis/output/')
 
 		writer = csv.writer(open(str(i[:-4]) + '.csv', 'wb'))
 		for key, value in allCountDict.items():
 		   writer.writerow([key, value])
+
 
