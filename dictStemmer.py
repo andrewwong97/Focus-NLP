@@ -3,7 +3,6 @@ from nltk.stem.porter import PorterStemmer
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
 
-
 # exports csv files for a folder of .txt essays
 # input must be a string
 
