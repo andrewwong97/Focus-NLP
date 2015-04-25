@@ -11,6 +11,8 @@ reader = csv.reader(f)
 
 essayData = [row for row in reader]
 
+# tokenizes hopkins data, later to be used to compare to EACH essay in essayData
+
 tokenizer = RegexpTokenizer(r'\w+')
 h = open('/Users/Andrew/Dropbox/python/focus/Word_Analysis/input/jhudesc-1.txt').read()
 hop = tokenizer.tokenize(h)
@@ -21,16 +23,14 @@ os.chdir('/Users/Andrew/Desktop')
 
 os.chdir('CC')
 
-# attempt to scrape messages off CC links
-allPosts = []
-# divMessages = soup.find_all('div', class_="Message")
+# time to analyze each essay
 
+allPosts = []
 for row in essayData:
 	for string in row:
 		r = requests.get(string)
 		soup = BeautifulSoup(r.content)
 		divMessages = soup.find_all('div', class_="Message")
-
 
 		# takes all divs with class Message, adds it to allPosts
 
@@ -51,8 +51,5 @@ for row in essayData:
 				if word  == item:
 					allCountDict.update({word: allData.count(word)})
 
-
 end = time.time()
 print end - start
-				
-			
