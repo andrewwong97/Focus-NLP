@@ -51,11 +51,6 @@ for row in essayData:
 				if word  == item:
 					allCountDict.update({word: allData.count(word)})
 
-		# for i in range(1, len(essayData) + 1):
-		# 	writer = csv.writer(open(str(i[:-4]) + '.csv', 'wb'))
-		# 	for key, value in allCountDict.items():
-		# 	   writer.writerow([key, value])
-
 
 end = time.time()
 print end - start
