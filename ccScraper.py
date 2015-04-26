@@ -19,37 +19,23 @@ hop = tokenizer.tokenize(h)
 hopData = [word.decode("utf-8", "ignore") for word in hop]
 hopData = [word.encode("ascii", "ignore") for word in hopData]
 
-os.chdir('/Users/Andrew/Desktop')
-
-os.chdir('CC')
+os.chdir('/Users/Andrew/Desktop/CC')
 
 # time to analyze each essay
 
 allPosts = []
 for row in essayData:
-	for string in row:
-		r = requests.get(string)
-		soup = BeautifulSoup(r.content)
-		divMessages = soup.find_all('div', class_="Message")
+	r = requests.get(row[0])
+	soup = BeautifulSoup(r.content)
+	divMessages = soup.find_all('div', class_="Message") # takes all user submitted posts
+	for item in divMessages[0:1]:
+		t = tokenizer.tokenize(item.get_text()) # makes it possible to analyze with NLTK
+		t = [char.decode("utf-8", "ignore") for char in t]
+		t = [char.encode("ascii", "ignore") for char in t]
+	if len(t) >= 300: # saves all essays greater than 300 words
+		with open("output_" + str(enumerate(essayData)) + ".txt", "w") as txtFile:
+			txtFile.write("%s" % t)
 
-		# takes all divs with class Message, adds it to allPosts
-
-		for item in divMessages[0:1]:
-			t = tokenizer.tokenize(item.get_text())
-			t = [char.decode("utf-8", "ignore") for char in t]
-			t = [char.encode("ascii", "ignore") for char in t]
-			allPosts.append(t)
-
-		# creates separate files for each user post
-
-		for i in range(1, len(essayData) + 1):
-			with open("output_" + str(i) + ".txt", "w") as txtFile:
-				txtFile.write("%s" % allPosts)
-
-		for word in allPosts:
-			for item in set(hopData):
-				if word  == item:
-					allCountDict.update({word: allData.count(word)})
 
 end = time.time()
 print end - start
