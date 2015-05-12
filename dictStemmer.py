@@ -1,4 +1,4 @@
-import os, csv
+import os, csv, nltk
 from nltk.stem.porter import PorterStemmer
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
@@ -22,12 +22,16 @@ def main(directory):
 
 		uniData = [word.decode("utf-8", "ignore") for word in data]
 		allData = [word.encode("ascii", "ignore") for word in uniData]
+		pos = nltk.pos_tag(allData)
+		posList = [k[0] for k in pos if k[1] == 'JJ']
+
 		allCountDict = {}
 
 		h = open('/Users/Andrew/Dropbox/python/focus/Word_Analysis/input/jhudesc-1.txt').read()
 		hop = tokenizer.tokenize(h)
 		hopData = [word.decode("utf-8", "ignore") for word in hop]
 		hopData = [word.encode("ascii", "ignore") for word in hopData]
+
 
 		for word in allData:
 			for item in hopData:
@@ -39,5 +43,10 @@ def main(directory):
 		writer = csv.writer(open(str(i[:-4]) + '.csv', 'wb'))
 		for key, value in allCountDict.items():
 		   writer.writerow([key, value])
+		writer = csv.writer(open(str(i[:-4]) + 'pos_' '.csv', 'wb'))
+		for pos in posList:
+			writer.writerow([pos, posList.count(pos)])
+
+# outputs a csv of all words that intersect with institution data, and a csv of all adjectives in essay + freq
 
 
